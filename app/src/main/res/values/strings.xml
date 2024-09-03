@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GridSim</string>
+    <string name="button_one_toast">Daisies bloom and so will desire</string>
+    <string name="button_two_toast">Keep your cool and blow out the fire</string>
 </resources>
