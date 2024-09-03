@@ -5,6 +5,8 @@ import static java.util.Arrays.fill;
 import android.content.Context;
 
 import android.media.Image;
+import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +45,11 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(2, 2, 2, 2);
+            final MediaPlayer mp = MediaPlayer.create(mContext, R.raw.goblin_scream);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mp.start();
                     Log.d("Index", "Index: " + position);
                 }
             });
