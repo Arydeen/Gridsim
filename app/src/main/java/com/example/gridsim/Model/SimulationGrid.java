@@ -46,7 +46,16 @@ public class SimulationGrid {
 
     public int size() {return numRows * numCols;}
 
-    public void setUsingJSON(JSONArray arr) {
-        //TODO: fill in your implementation
+    GridCellFactory gsf = new GridCellFactory();
+
+    public void setUsingJSON(JSONArray arr) throws JSONException {
+
+        for (int i = 0; i < arr.length(); i++) {
+            JSONArray rowArray = arr.getJSONArray(i);
+            for (int x = 0; x < rowArray.length(); x++) {
+                GridCell toSet = gsf.makeCell(rowArray.getInt(x), i, x);
+                setCell(i, x, toSet);
+            }
+        }
     }
 }

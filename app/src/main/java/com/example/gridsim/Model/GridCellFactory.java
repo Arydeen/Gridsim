@@ -6,8 +6,20 @@ package com.example.gridsim.Model;
  */
 
 public class GridCellFactory {
+
     public GridCell makeCell(int val, int row, int col) {
-        return null; //TODO: replace with your implementation
+
+        if (val == 0) {
+            return new GridCell(val, row, col);
+        } else if (val >= 1000 && val <= 3000) {
+            return new Plant(val, row, col);
+        } else if (val >= 2000000 && val <= 2999999) {
+            return new GardenerItem(val, row, col);
+        } else if (val >= 1000000 && val <= 1999999 || val >= 10000000 && val <= 20000000) {
+            return new TurnableGardenerItem(val, row, col);
+        } else {
+            return new GridCell(val, row, col);
+        }
     }
 
 }
