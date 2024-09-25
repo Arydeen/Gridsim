@@ -1,42 +1,29 @@
 package com.example.gridsim;
 
-import static java.util.Arrays.fill;
-
 import com.example.gridsim.Model.*;
 
 import android.content.Context;
 
-import android.content.Intent;
-import android.media.Image;
-import android.media.MediaPlayer;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 
 public class ImageAdapter extends BaseAdapter {
 
-    private Context mContext;
+    private Context mContext; // Context for the application
 
-    public SimulationGrid simGrid;
+    public SimulationGrid simGrid; // Simgrid to be used for image creation
 
-    private TextView infoBox;
+    private TextView infoBox; // Textbox to be used for cell info
 
-    public String cellInfo;
+    public String cellInfo; // Cell info to be sent to bundle
+
+    private int retPosition; // Current position, used for updating
 
     //Constructor
     public ImageAdapter(Context c, TextView infoBox) {
@@ -44,6 +31,7 @@ public class ImageAdapter extends BaseAdapter {
         this.infoBox = infoBox;
     }
 
+    // Returns Cell Count
     public int getCount() {
         return 256;
     }
@@ -56,6 +44,8 @@ public class ImageAdapter extends BaseAdapter {
         return 0;
     }
 
+    public int getPosition() {return retPosition;}
+
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
@@ -66,21 +56,22 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(2, 2, 2, 2);
             imageView.setOnClickListener(new View.OnClickListener() {
+                // onClick handled for each grid cell
                 @Override
                 public void onClick(View v) {
-                    Log.d("Index", "Index: " + position);
-                    String infoString = simGrid.getCell(position).getCellType() + ", " + simGrid.getCell(position).getCellInfo();
-                    cellInfo = infoString;
-                    infoBox.setText(infoString);
-                    ((MainActivity) mContext).setCellInfo(cellInfo);
+                    Log.d("Index", "Index: " + position); // Send index pos to debug
+                    String infoString = simGrid.getCell(position).getCellType()
+                            + ", " + simGrid.getCell(position).getCellInfo(); // Create cell info
+                    cellInfo = infoString; // Save cell info for save state
+                    infoBox.setText(infoString); // Set the textbox with the cell info
+                    ((MainActivity) mContext).setCellInfo(cellInfo); // Set cell info to bundle
+                    retPosition = position; // Update currently selected position
                 }
             });
-
-
         } else {
             imageView = (ImageView) convertView;
         }
-        imageView.setImageResource(simGrid.getCell(position).getResourceID());
+        imageView.setImageResource(simGrid.getCell(position).getResourceID()); // Set the Cell
 
         // Rotate if Gardener or Cart
         if (simGrid.getCell(position).getCellType() == "Gardener" || simGrid.getCell(position).getCellType() == "Cart") {

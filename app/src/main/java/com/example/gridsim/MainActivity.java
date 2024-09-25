@@ -1,7 +1,5 @@
 package com.example.gridsim;
 
-import com.example.gridsim.Model.*;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +16,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     static final String STATE_INFO = " ";
 
-    public String cellInfo;
+    public String cellInfo; // Cell info to put if saved instance
+
+    private SimGridView simGridView; // Simgrid to use
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         GridView gridview = (GridView) findViewById(R.id.gridview);
 
         // Create new SimGridView, and do initial attach()
-        SimGridView simGridView = new SimGridView();
+        simGridView = new SimGridView();
         simGridView.attach(infoText, gridview);
 
         // Check whether we're recreating a previously destroyed instance.
@@ -60,19 +60,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Restore value of members from saved state.
             cellInfo = savedInstanceState.getString(STATE_INFO);
             infoText.setText(cellInfo);
-        } else {
+        } else { // Set as default text
             infoText.setText("Click on a grid cell to get more info.");
         }
 
+        // Create new Poller instance
         Poller poller = new Poller();
 
+        // Start the poller
         poller.pollerStart(simGridView, this);
 
     }
 
     @Override
+    protected void onStop() {
+
+        // Detach from SimGridView before stop
+        simGridView.detach();
+        super.onStop();
+    }
+
+    @Override
     public void onClick(View v) {}
 
+    // Used for setting saved instance text
     public void setCellInfo(String toSet) {
         cellInfo = toSet;
     }
