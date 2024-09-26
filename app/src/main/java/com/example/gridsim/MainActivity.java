@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private SimGridView simGridView; // Simgrid to use
 
+    private int pauseFlag = 0; // Flag to know weather animation is playing or paused
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return insets;
         });
 
+        // Textview for text to be displayed for cell info;
+        TextView infoText = (TextView) this.findViewById(R.id.textView);
+
+        // Create gridview
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+
         // Unused Button
         Button button1 = (Button) this.findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener() {
@@ -38,18 +46,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {}
         });
 
-        // Unused Button
+        // Play / Pause Button
         Button button2 = (Button) this.findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {}
+            public void onClick(View v) {
+
+                if (pauseFlag % 2 == 0) {
+                    simGridView.detach();
+                } else {
+                    simGridView.attach(infoText, gridview);
+                }
+
+                pauseFlag++;
+
+            }
         });
-
-        // Textview for text to be displayed for cell info;
-        TextView infoText = (TextView) this.findViewById(R.id.textView);
-
-        // Create gridview
-        GridView gridview = (GridView) findViewById(R.id.gridview);
 
         // Create new SimGridView, and do initial attach()
         simGridView = new SimGridView();
@@ -65,10 +77,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // Create new Poller instance
-        Poller poller = new Poller();
+        Poller poller = Poller.getInstance();
 
         // Start the poller
-        poller.pollerStart(simGridView, this);
+        if (poller.pollerRunning == 0) {
+            poller.pollerStart(simGridView, this);
+        }
 
     }
 

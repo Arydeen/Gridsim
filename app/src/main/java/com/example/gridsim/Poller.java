@@ -1,6 +1,7 @@
 package com.example.gridsim;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -21,11 +22,26 @@ public class Poller {
 
     private String url = "http://stman1.cs.unh.edu:6191/games"; // URL to ping in requests
 
-    public Poller() {} // Constructor
+    private static Poller singletonPoller = null; // The one singleton instance of Poller
+
+    public int pollerRunning = 0; // Flag to tell if the poller is running, required for singleton
+
+    private Poller() {} // Constructor
+
+    // Method to create the singleton poller if one doesn't exist already
+    public static synchronized Poller getInstance() {
+
+        if (singletonPoller == null) {
+            singletonPoller = new Poller();
+        }
+        return singletonPoller;
+    }
 
     // Poller start method, sends one POST request on start, followed by
     // GET requests every 500 milliseconds
     public void pollerStart(SimGridView simGridView, Context c) {
+
+        pollerRunning = 1; // Set the poller running flag to 1
 
         // Create the ScheduledThreadPoolExecutor with 1 core
         ScheduledThreadPoolExecutor sch =
@@ -73,6 +89,7 @@ public class Poller {
                             public void onResponse(JSONObject response) {
                                 // On response, post to eventbus, send with response, and
                                 // SimGridView to use.
+                                Log.d("Singleton Test","Response Recieved");
                                 EventBus.getDefault().post(new responseEvent(response, simGridView));
                             }
                         },
