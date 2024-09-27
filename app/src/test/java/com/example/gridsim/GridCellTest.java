@@ -26,7 +26,6 @@ public class GridCellTest {
 
     GridCell testTGardenerItemLeft = gsf.makeCell(10040006, 7, 7);
 
-
     @Test
     public void testCellIsCorrect() {assertEquals("Empty", testCell.getCellType());}
 

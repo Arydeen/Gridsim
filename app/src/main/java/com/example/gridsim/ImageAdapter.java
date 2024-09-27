@@ -59,7 +59,6 @@ public class ImageAdapter extends BaseAdapter {
                 // onClick handled for each grid cell
                 @Override
                 public void onClick(View v) {
-                    Log.d("Index", "Index: " + position); // Send index pos to debug
                     String infoString = simGrid.getCell(position).getCellType()
                             + ", " + simGrid.getCell(position).getCellInfo(); // Create cell info
                     cellInfo = infoString; // Save cell info for save state

@@ -2,6 +2,7 @@ package com.example.gridsim;
 
 import com.example.gridsim.Model.*;
 
+import android.media.Image;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -32,12 +33,6 @@ public class SimGridView {
         // Make new SimulationGrid
         simGrid = new SimulationGrid(16, 16);
 
-        // Make new ImageAdapter
-        imageAdapter = new ImageAdapter(tView.getContext(), TextView);
-
-        // Set ImageAdapter's SimGrid to the new simgrid
-        imageAdapter.simGrid = simGrid;
-
         // register this class with the EventBus
         EventBus.getDefault().register(this);
     }
@@ -45,6 +40,14 @@ public class SimGridView {
     // Method to separate the SimGridView from some other objects, called in onStop
     public void detach() {
         EventBus.getDefault().unregister(this); // Un-register from EventBus
+    }
+
+    public void setImageAdapter() {
+        // Make new ImageAdapter
+        imageAdapter = new ImageAdapter(TextView.getContext(), TextView);
+
+        // Set ImageAdapter's SimGrid to the new simgrid
+        setImageAdapter(imageAdapter, simGrid);
     }
 
     // Method to set the grid and info text using a JSONArray
@@ -68,6 +71,10 @@ public class SimGridView {
 
         simGridView.setUsingJSON(gridArray);
 
+    }
+
+    public void setImageAdapter(ImageAdapter imageAdapter, SimulationGrid simGrid) {
+        imageAdapter.simGrid = simGrid;
     }
 
     // This method will be called when a responseEvent is posted

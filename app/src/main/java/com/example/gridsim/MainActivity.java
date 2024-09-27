@@ -1,5 +1,6 @@
 package com.example.gridsim;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     simGridView.detach();
                 } else {
                     simGridView.attach(infoText, gridview);
+                    simGridView.setImageAdapter();
                 }
 
                 pauseFlag++;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Create new SimGridView, and do initial attach()
         simGridView = new SimGridView();
         simGridView.attach(infoText, gridview);
+        simGridView.setImageAdapter();
 
         // Check whether we're recreating a previously destroyed instance.
         if (savedInstanceState != null) {

@@ -89,7 +89,6 @@ public class Poller {
                             public void onResponse(JSONObject response) {
                                 // On response, post to eventbus, send with response, and
                                 // SimGridView to use.
-                                Log.d("Singleton Test","Response Recieved");
                                 EventBus.getDefault().post(new responseEvent(response, simGridView));
                             }
                         },
